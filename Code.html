@@ -1,3 +1,4 @@
+
 ```html
 <!DOCTYPE html>
 <html lang="es">
@@ -17,28 +18,20 @@
   --nav-h:60px;
 }
 body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--brown);font-size:14px;min-height:100vh;padding-bottom:var(--nav-h);}
-
-/* TOPBAR */
 #topbar{background:var(--cobalt);padding:0 16px;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 16px rgba(26,58,110,.18);}
 .tb-left{display:flex;align-items:center;gap:10px;}
 .tb-logo-img{height:34px;width:auto;}
 .tb-right{display:flex;align-items:center;gap:8px;}
-.tb-user{font-size:12px;color:rgba(255,255,255,.75);font-weight:600;max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tb-user{font-size:12px;color:rgba(255,255,255,.75);font-weight:600;max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .tb-avatar{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;cursor:pointer;}
-
-/* BOTTOM NAV */
 #bottom-nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);background:#fff;border-top:1.5px solid var(--border);display:flex;z-index:300;box-shadow:0 -2px 12px rgba(0,0,0,.07);}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:var(--light);transition:color .15s;border:none;background:none;font-family:inherit;padding:6px 0;}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:var(--light);transition:color .15s;border:none;background:none;font-family:inherit;padding:6px 0;position:relative;}
 .nav-item.active{color:var(--accent);}
 .nav-item svg{width:20px;height:20px;}
 .nav-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
-.nav-badge{position:absolute;top:6px;right:calc(50% - 18px);background:var(--danger);color:#fff;font-size:9px;font-weight:800;border-radius:99px;padding:1px 5px;min-width:16px;text-align:center;}
-
-/* SECTIONS */
+.nav-badge{position:absolute;top:5px;right:calc(50% - 20px);background:var(--danger);color:#fff;font-size:9px;font-weight:800;border-radius:99px;padding:1px 5px;min-width:16px;text-align:center;}
 .section{display:none;max-width:1120px;margin:0 auto;padding:16px 14px 24px;}
 .section.active{display:block;}
-
-/* BANNER */
 #banner{background:var(--cobalt);border-radius:14px;padding:18px 20px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 4px 18px rgba(26,58,110,.15);}
 #banner-greeting{font-size:18px;font-weight:800;color:#fff;margin-bottom:2px;letter-spacing:-.02em;}
 #banner-fecha{font-size:11px;color:rgba(255,255,255,.5);margin-bottom:14px;font-weight:500;}
@@ -46,16 +39,12 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .bstat{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 14px;min-width:80px;}
 .bstat-num{font-size:20px;font-weight:800;color:#fff;line-height:1;}
 .bstat-lbl{font-size:10px;color:rgba(255,255,255,.5);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-top:3px;}
-
-/* CARDS */
 .card{background:var(--surface);border-radius:13px;border:1.5px solid var(--border);overflow:hidden;margin-bottom:14px;}
 .card-hdr{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
 .card-title{font-size:11px;font-weight:800;color:var(--cobalt);text-transform:uppercase;letter-spacing:.08em;}
 .card-body{padding:12px 16px;}
 .card-action{padding:5px 11px;background:var(--apl);color:var(--accent);border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
 .card-action:hover{background:var(--accent);color:#fff;}
-
-/* AGENDA */
 #agenda-hdr{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
 #agenda-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
 .dur-sel{padding:5px 8px;border:1.5px solid var(--border);border-radius:7px;font-size:11px;font-weight:700;color:var(--cobalt);background:#fff;cursor:pointer;outline:none;font-family:inherit;}
@@ -88,9 +77,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 #agenda-foot{padding:8px 16px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg);}
 #agenda-foot-txt{font-size:11px;color:var(--light);}
 #total-hoy-lbl{font-size:11px;font-weight:700;color:var(--cobalt);}
-
-/* HOY */
-.hoy-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);}
+.hoy-item{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--border);}
 .hoy-item:last-child{border-bottom:none;}
 .hoy-hora{font-size:11px;font-weight:800;color:var(--accent);width:40px;flex-shrink:0;text-align:center;background:var(--apl);border-radius:6px;padding:3px 4px;}
 .hoy-info{flex:1;min-width:0;}
@@ -111,8 +98,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .hoy-item.ghost-item .hoy-nombre{text-decoration:line-through;}
 .hoy-hora.aplazada-hora{background:var(--ypl);color:#92400E;}
 .hoy-hora.cancelada-hora{background:var(--bg);color:var(--light);}
-
-/* PAGOS */
 .pago-resumen{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
 @media(max-width:480px){.pago-resumen{grid-template-columns:repeat(2,1fr);}}
 .pago-card{background:var(--surface);border-radius:12px;border:1.5px solid var(--border);padding:14px 16px;text-align:center;}
@@ -123,9 +108,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .deuda-nombre{font-size:13px;font-weight:700;color:var(--brown);}
 .deuda-hc{font-size:10px;color:var(--light);margin-top:1px;}
 .deuda-monto{font-size:13px;font-weight:800;color:var(--danger);}
-.deuda-monto.cero{color:var(--green);}
-
-/* RECIBO */
 .recibo-item{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);gap:8px;}
 .recibo-item:last-child{border-bottom:none;}
 .recibo-info{flex:1;min-width:0;}
@@ -134,8 +116,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .recibo-monto{font-size:13px;font-weight:800;color:var(--green);flex-shrink:0;}
 .recibo-print{background:none;border:1.5px solid var(--border);border-radius:6px;padding:4px 8px;font-size:10px;font-weight:700;cursor:pointer;color:var(--mid);font-family:inherit;}
 .recibo-print:hover{border-color:var(--accent);color:var(--accent);}
-
-/* STATS */
 #stats-body{padding:14px 16px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
 @media(max-width:500px){#stats-body{grid-template-columns:repeat(2,1fr);}}
 .stat-block{text-align:center;}
@@ -144,8 +124,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .stat-num-big{font-size:22px;font-weight:800;line-height:1;}
 .stat-lbl-sm{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
 .stat-pct{font-size:10px;font-weight:600;color:var(--light);}
-
-/* MODAL */
 #modal-wrap{display:none;position:fixed;inset:0;background:rgba(10,20,40,.45);z-index:1000;align-items:flex-end;justify-content:center;padding:0;}
 #modal-wrap.open{display:flex;}
 #modal-box{background:#fff;border-radius:20px 20px 0 0;padding:20px 20px 32px;width:100%;max-width:500px;box-shadow:0 -8px 40px rgba(0,0,0,.15);}
@@ -171,8 +149,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .modal-actions{display:flex;gap:8px;margin-top:8px;}
 .btn-cancel-m{flex:0;padding:12px 14px;background:var(--bg);color:var(--mid);border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
 .btn-confirm-m{flex:1;padding:12px;background:linear-gradient(135deg,var(--cobalt),var(--accent));color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
-
-/* MODAL MONTO */
 #monto-modal{display:none;position:fixed;inset:0;background:rgba(10,20,40,.45);z-index:1100;align-items:flex-end;justify-content:center;}
 #monto-modal.open{display:flex;}
 #monto-box{background:#fff;border-radius:20px 20px 0 0;padding:20px 20px 32px;width:100%;max-width:500px;}
@@ -189,9 +165,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 
 <div id="topbar">
   <div class="tb-left">
-    <img class="tb-logo-img" src="https://i.imgur.com/placeholder.png" id="logo-img" alt="MedHC" onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='flex'"/>
-    <div id="logo-fallback" style="display:flex;align-items:center;gap:6px;">
-      <svg viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:30px;height:30px;flex-shrink:0"><rect width="54" height="54" rx="12" fill="#0891B2"/><path d="M10 27 L18 14 L24 27 L30 10 L36 27 L42 20" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="27" cy="40" r="4" fill="rgba(255,255,255,0.3)"/><circle cx="27" cy="40" r="2" fill="#fff"/></svg>
+    <img class="tb-logo-img" id="logo-img" alt="MedHC"
+      src="https://raw.githubusercontent.com/tu-usuario/tu-repo/main/logo.png"
+      onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='flex'"/>
+    <div id="logo-fallback" style="display:none;align-items:center;gap:6px;">
+      <svg viewBox="0 0 54 54" fill="none" style="width:30px;height:30px;flex-shrink:0"><rect width="54" height="54" rx="12" fill="#0891B2"/><path d="M10 27 L18 14 L24 27 L30 10 L36 27 L42 20" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="27" cy="40" r="4" fill="rgba(255,255,255,0.3)"/><circle cx="27" cy="40" r="2" fill="#fff"/></svg>
       <span style="font-size:15px;font-weight:800;color:#fff;letter-spacing:-.02em;">MedHC</span>
     </div>
   </div>
@@ -201,29 +179,28 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   </div>
 </div>
 
-<!-- BOTTOM NAV -->
 <nav id="bottom-nav">
-  <button class="nav-item active" onclick="irSeccion('agenda',this)" id="nav-agenda">
+  <button class="nav-item active" onclick="irSeccion('agenda',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
     <span class="nav-label">Agenda</span>
   </button>
-  <button class="nav-item" onclick="irSeccion('hoy',this)" id="nav-hoy" style="position:relative;">
+  <button class="nav-item" onclick="irSeccion('hoy',this)" style="position:relative;">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
     <span class="nav-label">Hoy</span>
     <span class="nav-badge" id="badge-hoy" style="display:none">0</span>
   </button>
-  <button class="nav-item" onclick="irSeccion('pagos',this)" id="nav-pagos" style="position:relative;">
+  <button class="nav-item" onclick="irSeccion('pagos',this)" style="position:relative;">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
     <span class="nav-label">Pagos</span>
     <span class="nav-badge" id="badge-pagos" style="display:none">0</span>
   </button>
-  <button class="nav-item" onclick="irSeccion('stats',this)" id="nav-stats">
+  <button class="nav-item" onclick="irSeccion('stats',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
     <span class="nav-label">Stats</span>
   </button>
 </nav>
 
-<!-- SECCIÓN: AGENDA -->
+<!-- AGENDA -->
 <div class="section active" id="sec-agenda">
   <div id="banner">
     <div>
@@ -264,9 +241,523 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   </div>
 </div>
 
-<!-- SECCIÓN: HOY -->
+<!-- HOY -->
 <div class="section" id="sec-hoy">
   <div class="card">
     <div class="card-hdr">
       <div class="card-title">Consultas de hoy</div>
       <button class="card-action" onclick="abrirModal(null,null,true)">+ Imprevisto</button>
+    </div>
+    <div class="card-body" id="hoy-lista"></div>
+  </div>
+</div>
+
+<!-- PAGOS -->
+<div class="section" id="sec-pagos">
+  <div class="pago-resumen">
+    <div class="pago-card">
+      <div class="pago-card-num" id="p-ingresos" style="color:var(--green)">$0</div>
+      <div class="pago-card-lbl">Ingresos mes</div>
+    </div>
+    <div class="pago-card">
+      <div class="pago-card-num" id="p-pendientes" style="color:var(--danger)">0</div>
+      <div class="pago-card-lbl">Pendientes</div>
+    </div>
+    <div class="pago-card">
+      <div class="pago-card-num" id="p-deuda-total" style="color:var(--yellow)">0</div>
+      <div class="pago-card-lbl">Sin cobrar</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-hdr">
+      <div class="card-title">Deuda por paciente</div>
+    </div>
+    <div class="card-body" id="deuda-lista"></div>
+  </div>
+  <div class="card">
+    <div class="card-hdr">
+      <div class="card-title">Pagos recibidos</div>
+      <select id="recibo-periodo" onchange="renderPagos()" style="padding:4px 8px;border:1.5px solid var(--border);border-radius:7px;font-size:11px;font-weight:700;color:var(--cobalt);background:#fff;cursor:pointer;outline:none;font-family:inherit;">
+        <option value="30" selected>Este mes</option>
+        <option value="90">3 meses</option>
+        <option value="0">Todo</option>
+      </select>
+    </div>
+    <div class="card-body" id="recibo-lista"></div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="section" id="sec-stats">
+  <div class="card">
+    <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+      <div class="card-title">Estadísticas de asistencia</div>
+      <select id="stats-periodo" onchange="renderStats()" style="padding:4px 8px;border:1.5px solid var(--border);border-radius:7px;font-size:11px;font-weight:700;color:var(--cobalt);background:#fff;cursor:pointer;outline:none;font-family:inherit;">
+        <option value="7">7 días</option>
+        <option value="30" selected>30 días</option>
+        <option value="90">90 días</option>
+        <option value="365">Este año</option>
+        <option value="0">Todo</option>
+      </select>
+    </div>
+    <div id="stats-body">
+      <div class="stat-block"><div class="stat-num-big" id="s-total" style="color:var(--cobalt)">—</div><div class="stat-lbl-sm" style="color:var(--cobalt)">Total</div><div class="stat-bar-wrap"><div class="stat-bar" id="sb-total" style="background:var(--cobalt);width:100%"></div></div><div class="stat-pct" id="sp-total">consultas</div></div>
+      <div class="stat-block"><div class="stat-num-big" id="s-asistio" style="color:var(--green)">—</div><div class="stat-lbl-sm" style="color:var(--green)">Asistió</div><div class="stat-bar-wrap"><div class="stat-bar" id="sb-asistio" style="background:var(--green)"></div></div><div class="stat-pct" id="sp-asistio">—</div></div>
+      <div class="stat-block"><div class="stat-num-big" id="s-noasistio" style="color:var(--danger)">—</div><div class="stat-lbl-sm" style="color:var(--danger)">No asistió</div><div class="stat-bar-wrap"><div class="stat-bar" id="sb-noasistio" style="background:var(--danger)"></div></div><div class="stat-pct" id="sp-noasistio">—</div></div>
+      <div class="stat-block"><div class="stat-num-big" id="s-aplazada" style="color:var(--yellow)">—</div><div class="stat-lbl-sm" style="color:#92400E">Aplazada</div><div class="stat-bar-wrap"><div class="stat-bar" id="sb-aplazada" style="background:var(--yellow)"></div></div><div class="stat-pct" id="sp-aplazada">—</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CITA -->
+<div id="modal-wrap">
+  <div id="modal-box">
+    <div class="modal-handle"></div>
+    <h3 id="modal-ttl">Nueva consulta</h3>
+    <div id="modal-sub"></div>
+    <div class="mf">
+      <label>Paciente</label>
+      <input id="m-nombre" type="text" placeholder="Nombre o historia clínica..." autocomplete="off" oninput="buscarPac(this.value)"/>
+      <div id="pac-sugeridos"></div>
+    </div>
+    <div class="mf" id="hora-field">
+      <label>Hora</label>
+      <select id="m-hora"></select>
+    </div>
+    <div class="mf" id="monto-field">
+      <label>Valor de sesión (opcional)</label>
+      <input id="m-monto" type="number" placeholder="0" min="0"/>
+    </div>
+    <div id="modal-conflict"></div>
+    <div id="aplazar-panel">
+      <label>Reagendar para</label>
+      <div class="aplazar-row">
+        <input type="date" id="apl-fecha" oninput="poblarHorasApl(this.value)"/>
+        <select id="apl-hora"></select>
+        <button class="btn-apl-ok" onclick="confirmarAplazar()">OK</button>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel-m" onclick="cerrarModal()">Cancelar</button>
+      <button class="btn-confirm-m" id="btn-confirm-m" onclick="confirmarCita()">Agendar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PAGO -->
+<div id="monto-modal">
+  <div id="monto-box">
+    <div class="modal-handle"></div>
+    <div class="monto-titulo" id="monto-titulo">Registrar pago</div>
+    <div class="monto-sub" id="monto-sub"></div>
+    <div class="monto-input-wrap">
+      <span class="monto-prefix">$</span>
+      <input id="monto-input" type="number" placeholder="0" min="0"/>
+    </div>
+    <button class="btn-monto-ok" onclick="confirmarPago()">Confirmar pago</button>
+  </div>
+</div>
+
+<script>
+const H_INI=7,H_FIN=20;
+const AGENDA_KEY="medhc_agenda_v4";
+const PROF_KEY="medhc_prof";
+
+// ── NOMBRE DESDE FIREBASE AUTH ─────────────────────────────────────────────
+// Cuando conectes Firebase, reemplaza getProf() con:
+// firebase.auth().onAuthStateChanged(u => { if(u){ setProf(u.displayName||u.email); initBanner(); }});
+function getProf(){return localStorage.getItem(PROF_KEY)||"Psicólogo/a";}
+function setProf(n){localStorage.setItem(PROF_KEY,n);}
+
+// Demo: cambia este nombre para probar
+setProf("Carolina Aponte");
+
+const PACS=[
+  {id:"p1",hcCode:"HC-2026-001",nombre:"Laura Martínez",tipo:"Adolescente"},
+  {id:"p2",hcCode:"HC-2026-002",nombre:"Carlos Rodríguez",tipo:"Adulto"},
+  {id:"p3",hcCode:"HC-2026-003",nombre:"Sofía & Andrés",tipo:"Pareja"},
+  {id:"p4",hcCode:"HC-2026-004",nombre:"Familia Torres",tipo:"Familia"},
+  {id:"p5",hcCode:"HC-2026-005",nombre:"Miguel Fernández",tipo:"Adulto mayor"},
+];
+
+let agenda={},dur=60,semOff=0,mDia=null,mEditIdx=null,mPagoDk=null,mPagoIdx=null;
+
+function cargar(){try{const s=localStorage.getItem(AGENDA_KEY);if(s)agenda=JSON.parse(s);}catch(e){agenda={};}}
+function guardar(){localStorage.setItem(AGENDA_KEY,JSON.stringify(agenda));}
+function fk(d){return d.toISOString().split("T")[0];}
+function hk(){return fk(new Date());}
+function fmtH(m){const h=Math.floor(m/60),mn=m%60,ap=h>=12?"PM":"AM",h12=h>12?h-12:h===0?12:h;return h12+":"+(mn===0?"00":mn<10?"0"+mn:mn)+" "+ap;}
+function fmtHC(m){const h=Math.floor(m/60),mn=m%60;return h+":"+(mn===0?"00":mn<10?"0"+mn:mn);}
+function fmtMonto(n){if(!n||n===0)return "—";return "$"+Number(n).toLocaleString("es");}
+
+function irSeccion(id,btn){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll(".nav-item").forEach(b=>b.classList.remove("active"));
+  document.getElementById("sec-"+id).classList.add("active");
+  btn.classList.add("active");
+  if(id==="pagos")renderPagos();
+  if(id==="stats")renderStats();
+  if(id==="hoy")renderHoy();
+}
+
+function initBanner(){
+  const prof=getProf();
+  const ini=prof.split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2);
+  document.getElementById("tb-user").textContent=prof;
+  document.getElementById("tb-avatar").textContent=ini;
+  const a=new Date(),h=a.getHours();
+  const sal=h<12?"Buenos días":h<18?"Buenas tardes":"Buenas noches";
+  document.getElementById("banner-greeting").textContent=sal+", "+prof.split(" ")[0];
+  document.getElementById("banner-fecha").textContent=a.toLocaleDateString("es-ES",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
+  document.getElementById("st-total").textContent=PACS.length;
+  document.getElementById("st-sesiones").textContent=contarSesionesMes();
+  actualizarStatHoy();
+}
+
+function contarSesionesMes(){
+  const a=new Date(),mes=a.getMonth(),anio=a.getFullYear();
+  let n=0;
+  Object.keys(agenda).forEach(dk=>{
+    const f=new Date(dk+"T00:00:00");
+    if(f.getMonth()===mes&&f.getFullYear()===anio)n+=(agenda[dk]||[]).length;
+  });
+  return n;
+}
+
+function actualizarStatHoy(){
+  const citas=agenda[hk()]||[];
+  const n=citas.length;
+  document.getElementById("st-hoy").textContent=n;
+  document.getElementById("total-hoy-lbl").textContent=n+" consulta"+(n!==1?"s":"")+" hoy";
+  const bh=document.getElementById("badge-hoy");
+  bh.textContent=n;bh.style.display=n>0?"block":"none";
+  const totPend=Object.values(agenda).flat().filter(c=>!c.pagado&&c.estado==="asistio").length;
+  const bp=document.getElementById("badge-pagos");
+  bp.textContent=totPend;bp.style.display=totPend>0?"block":"none";
+}
+
+function renderHoy(){
+  const el=document.getElementById("hoy-lista");
+  const citas=(agenda[hk()]||[]).slice().sort((a,b)=>a.horaInicio-b.horaInicio);
+  if(!citas.length){
+    el.innerHTML='<div class="empty-hoy"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--border)" stroke-width="1.5" style="display:block;margin:0 auto 8px"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Sin consultas agendadas hoy</div>';
+    return;
+  }
+  el.innerHTML=citas.map((c,i)=>{
+    const est=c.estado||"";
+    const cls=est==="asistio"?"asistio":est==="no-asistio"?"no-asistio":est==="aplazada"?"aplazada":est==="cancelada"?"cancelada":"";
+    const isGh=est==="aplazada"||est==="cancelada";
+    const horaCls=est==="aplazada"?" aplazada-hora":est==="cancelada"?" cancelada-hora":"";
+    const mostrarPago=est==="asistio";
+    const pagoCls=c.pagado?"pagado":"pendiente";
+    const pagoTxt=c.pagado?"✓ "+fmtMonto(c.monto):"Cobrar";
+    return `<div class="hoy-item${isGh?" ghost-item":""}">
+      <div class="hoy-hora${horaCls}">${fmtHC(c.horaInicio)}</div>
+      <div class="hoy-info">
+        <div class="hoy-nombre">${c.nombre}</div>
+        <div class="hoy-sub">${c.hcCode?c.hcCode+" · ":""}${fmtH(c.horaInicio)}–${fmtH(c.horaInicio+c.duracion)}</div>
+      </div>
+      <select class="estado-sel ${cls}" onchange="setEstado('${hk()}',${i},this)">
+        <option value="" ${!est?"selected":""}>Estado</option>
+        <option value="asistio" ${est==="asistio"?"selected":""}>Asistió</option>
+        <option value="no-asistio" ${est==="no-asistio"?"selected":""}>No asistió</option>
+        <option value="aplazada" ${est==="aplazada"?"selected":""}>Aplazar</option>
+        <option value="cancelada" ${est==="cancelada"?"selected":""}>Cancelada</option>
+      </select>
+      ${mostrarPago?`<button class="pago-btn ${pagoCls}" onclick="abrirPago('${hk()}',${i})">${pagoTxt}</button>`:""}
+      <button class="hoy-del" onclick="eliminar('${hk()}',${i},event)">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>`;
+  }).join("");
+}
+
+function setEstado(dk,idx,sel){
+  const v=sel.value;
+  sel.className="estado-sel"+(v?" "+v:"");
+  if(v==="aplazada"){abrirAplazar(dk,idx);sel.value=agenda[dk][idx].estado||"";return;}
+  if(agenda[dk]&&agenda[dk][idx]){agenda[dk][idx].estado=v;guardar();}
+  renderHoy();renderAgenda();actualizarStatHoy();
+}
+
+function abrirPago(dk,idx){
+  mPagoDk=dk;mPagoIdx=idx;
+  const c=agenda[dk][idx];
+  document.getElementById("monto-titulo").textContent=c.pagado?"Editar pago":"Registrar pago";
+  document.getElementById("monto-sub").textContent=c.nombre+" — "+fmtH(c.horaInicio);
+  document.getElementById("monto-input").value=c.monto||"";
+  document.getElementById("monto-modal").classList.add("open");
+  setTimeout(()=>document.getElementById("monto-input").focus(),100);
+}
+
+function confirmarPago(){
+  const monto=parseFloat(document.getElementById("monto-input").value)||0;
+  if(agenda[mPagoDk]&&agenda[mPagoDk][mPagoIdx]){
+    agenda[mPagoDk][mPagoIdx].pagado=true;
+    agenda[mPagoDk][mPagoIdx].monto=monto;
+    agenda[mPagoDk][mPagoIdx].fechaPago=new Date().toISOString();
+    guardar();
+  }
+  document.getElementById("monto-modal").classList.remove("open");
+  renderHoy();renderAgenda();actualizarStatHoy();
+}
+
+function renderPagos(){
+  const dias=parseInt(document.getElementById("recibo-periodo").value);
+  const ahora=new Date(),mes=ahora.getMonth(),anio=ahora.getFullYear();
+  let ingresosMes=0,pendientesCount=0;
+  const deudaPorPac={};
+  const recibos=[];
+  Object.keys(agenda).forEach(dk=>{
+    const fecha=new Date(dk+"T00:00:00");
+    const diffDias=Math.round((ahora-fecha)/(1000*60*60*24));
+    (agenda[dk]||[]).forEach(c=>{
+      if(c.estado!=="asistio")return;
+      if(!c.pagado){
+        pendientesCount++;
+        if(!deudaPorPac[c.nombre])deudaPorPac[c.nombre]={hcCode:c.hcCode||"",sesiones:0};
+        deudaPorPac[c.nombre].sesiones++;
+      } else {
+        const monto=c.monto||0;
+        if(fecha.getMonth()===mes&&fecha.getFullYear()===anio)ingresosMes+=monto;
+        if(dias===0||diffDias<=dias)recibos.push({...c,fecha:dk});
+      }
+    });
+  });
+  document.getElementById("p-ingresos").textContent="$"+ingresosMes.toLocaleString("es");
+  document.getElementById("p-pendientes").textContent=pendientesCount;
+  document.getElementById("p-deuda-total").textContent=pendientesCount+" ses.";
+  const deudaEl=document.getElementById("deuda-lista");
+  const keys=Object.keys(deudaPorPac);
+  deudaEl.innerHTML=!keys.length
+    ?'<div style="text-align:center;padding:20px 0;color:var(--light);font-size:12px;">✓ Sin deudas pendientes</div>'
+    :keys.map(n=>`<div class="deuda-item"><div><div class="deuda-nombre">${n}</div><div class="deuda-hc">${deudaPorPac[n].hcCode}</div></div><div class="deuda-monto">${deudaPorPac[n].sesiones} sesión${deudaPorPac[n].sesiones!==1?"es":""} sin cobrar</div></div>`).join("");
+  recibos.sort((a,b)=>new Date(b.fecha)-new Date(a.fecha));
+  const reciboEl=document.getElementById("recibo-lista");
+  reciboEl.innerHTML=!recibos.length
+    ?'<div style="text-align:center;padding:20px 0;color:var(--light);font-size:12px;">Sin pagos en este período</div>'
+    :recibos.map(r=>{
+      const fd=new Date(r.fecha+"T00:00:00").toLocaleDateString("es-ES",{day:"numeric",month:"short"});
+      return `<div class="recibo-item"><div class="recibo-info"><div class="recibo-nombre">${r.nombre}</div><div class="recibo-sub">${fd} · ${fmtH(r.horaInicio)}</div></div><div class="recibo-monto">${fmtMonto(r.monto)}</div><button class="recibo-print" onclick="imprimirRecibo('${r.nombre}','${r.fecha}',${r.horaInicio},${r.monto||0})">🖨</button></div>`;
+    }).join("");
+}
+
+function imprimirRecibo(nombre,fecha,horaInicio,monto){
+  const prof=getProf();
+  const fd=new Date(fecha+"T00:00:00").toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+  const w=window.open("","_blank","width=420,height=520");
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Recibo MedHC</title>
+  <style>body{font-family:sans-serif;padding:32px;max-width:340px;margin:0 auto;}
+  h2{color:#1A3A6E;margin-bottom:2px;font-size:22px;}
+  .sub{color:#94A3B8;font-size:12px;margin-bottom:24px;}
+  .row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #eee;font-size:14px;}
+  .monto{font-size:24px;font-weight:800;color:#16A34A;text-align:right;margin-top:18px;}
+  .footer{margin-top:24px;font-size:11px;color:#94A3B8;text-align:center;}</style>
+  </head><body>
+  <h2>MedHC</h2><div class="sub">Recibo de consulta psicológica</div>
+  <div class="row"><span>Profesional</span><span>${prof}</span></div>
+  <div class="row"><span>Paciente</span><span>${nombre}</span></div>
+  <div class="row"><span>Fecha</span><span>${fd}</span></div>
+  <div class="row"><span>Hora</span><span>${fmtH(horaInicio)}</span></div>
+  <div class="monto">Total: $${Number(monto).toLocaleString("es")}</div>
+  <div class="footer">Generado por MedHC · Global Medical Records</div>
+  <script>window.print();<\/script></body></html>`);
+}
+
+function esGhost(s){return s.estado==="aplazada"||s.estado==="cancelada";}
+function choca(dk,ini,dr,ex){return (agenda[dk]||[]).some((s,i)=>{if(i===ex||esGhost(s))return false;return ini<s.horaInicio+s.duracion&&ini+dr>s.horaInicio;});}
+function chicaInfo(dk,ini,dr,ex){return (agenda[dk]||[]).find((s,i)=>{if(i===ex||esGhost(s))return false;return ini<s.horaInicio+s.duracion&&ini+dr>s.horaInicio;});}
+function getLunes(off){const hoy=new Date(),d=hoy.getDay()||7,l=new Date(hoy);l.setDate(hoy.getDate()-(d-1)+off*7);l.setHours(0,0,0,0);return l;}
+function cambiarDuracion(v){dur=parseInt(v);renderAgenda();}
+function cambiarSemana(d){semOff+=d;renderAgenda();}
+function irHoy(){semOff=0;renderAgenda();}
+const DIAS_S=["Lun","Mar","Mié","Jue","Vie","Sáb"];
+
+function renderAgenda(){
+  const lunes=getLunes(semOff);
+  const fin=new Date(lunes);fin.setDate(fin.getDate()+5);
+  const op={day:"numeric",month:"short"};
+  document.getElementById("semana-lbl").textContent=lunes.toLocaleDateString("es-ES",op)+" – "+fin.toLocaleDateString("es-ES",op);
+  const hoy=hk(),grid=document.getElementById("days-grid");grid.innerHTML="";
+  for(let di=0;di<6;di++){
+    const f=new Date(lunes);f.setDate(lunes.getDate()+di);
+    const dk=fk(f),esH=dk===hoy;
+    const slots=(agenda[dk]||[]).slice().sort((a,b)=>a.horaInicio-b.horaInicio);
+    const col=document.createElement("div");
+    col.className="day-col"+(esH?" is-today":"");
+    col.innerHTML=`<div class="day-hdr"><div class="day-hdr-name">${DIAS_S[di]}</div><div class="day-hdr-num">${f.getDate()}</div></div><div class="day-slots" id="ds-${dk}"></div>`;
+    grid.appendChild(col);
+    const sl=col.querySelector(`#ds-${dk}`);
+    slots.forEach((s,i)=>{
+      const conf=choca(dk,s.horaInicio,s.duracion,i);
+      const isGhost=esGhost(s);
+      const d2=document.createElement("div");
+      d2.className="slot occ"+(conf&&!isGhost?" conflict":"")+(isGhost?" ghost":"")+(s.pagado?" pagada":"");
+      const label=isGhost?`<span style="font-size:8px;font-weight:800;text-transform:uppercase;color:var(--light);flex-shrink:0">${s.estado==="aplazada"?"APL":"CAN"}</span>`:"";
+      const pagoIcon=s.pagado&&!isGhost?`<span style="font-size:9px;color:var(--green);flex-shrink:0">✓</span>`:"";
+      d2.innerHTML=`<span class="slot-t">${fmtHC(s.horaInicio)}</span><span class="slot-n">${s.nombre}</span>${label}${pagoIcon}<button class="slot-x" onclick="eliminar('${dk}',${i},event)">✕</button>`;
+      sl.appendChild(d2);
+    });
+    const add=document.createElement("div");
+    add.className="slot";
+    add.innerHTML=`<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span class="slot-n" style="font-size:10px">Agendar</span>`;
+    add.onclick=()=>abrirModal(dk,f,false);
+    sl.appendChild(add);
+  }
+  actualizarStatHoy();renderHoy();
+}
+
+function abrirModal(dk,fecha,imprevisto){
+  mDia=dk||hk();mEditIdx=null;
+  document.getElementById("modal-ttl").textContent=imprevisto?"Consulta imprevista — hoy":"Nueva consulta";
+  const f2=fecha||new Date();
+  document.getElementById("modal-sub").textContent=f2.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"});
+  document.getElementById("m-nombre").value="";document.getElementById("m-nombre").disabled=false;
+  document.getElementById("m-monto").value="";
+  document.getElementById("pac-sugeridos").style.display="none";
+  document.getElementById("modal-conflict").style.display="none";
+  document.getElementById("aplazar-panel").style.display="none";
+  document.getElementById("hora-field").style.display="";
+  document.getElementById("monto-field").style.display="";
+  document.getElementById("btn-confirm-m").style.display="";
+  poblarHoras(mDia);
+  document.getElementById("modal-wrap").classList.add("open");
+  setTimeout(()=>document.getElementById("m-nombre").focus(),100);
+}
+
+function poblarHoras(dk){
+  const sel=document.getElementById("m-hora");sel.innerHTML="";
+  let pf=true;
+  for(let m=H_INI*60;m+dur<=H_FIN*60;m+=15){
+    const conf=choca(dk,m,dur,-1);
+    const o=document.createElement("option");o.value=m;
+    o.textContent=fmtH(m)+(conf?" — Ocupado":"");o.disabled=conf;
+    if(!conf&&pf){o.selected=true;pf=false;}
+    sel.appendChild(o);
+  }
+}
+
+function cerrarModal(){
+  document.getElementById("modal-wrap").classList.remove("open");
+  document.getElementById("pac-sugeridos").style.display="none";
+  mDia=null;mEditIdx=null;
+}
+
+function confirmarCita(){
+  const nombre=document.getElementById("m-nombre").value.trim();
+  const hi=parseInt(document.getElementById("m-hora").value);
+  const monto=parseFloat(document.getElementById("m-monto").value)||0;
+  const cel=document.getElementById("modal-conflict");
+  if(!nombre){document.getElementById("m-nombre").focus();return;}
+  const conf=chicaInfo(mDia,hi,dur,-1);
+  if(conf){cel.style.display="block";cel.textContent="Conflicto con "+conf.nombre+" ("+fmtH(conf.horaInicio)+"). Elige otra hora.";return;}
+  cel.style.display="none";
+  const pac=PACS.find(p=>p.nombre.toLowerCase()===nombre.toLowerCase());
+  if(!agenda[mDia])agenda[mDia]=[];
+  agenda[mDia].push({nombre,horaInicio:hi,duracion:dur,estado:"",hcCode:pac?pac.hcCode:"",monto:monto||null,pagado:false});
+  guardar();cerrarModal();renderAgenda();renderHoy();actualizarStatHoy();
+}
+
+function buscarPac(q){
+  const box=document.getElementById("pac-sugeridos");
+  if(!q.trim()){box.style.display="none";return;}
+  const res=PACS.filter(p=>p.nombre.toLowerCase().includes(q.toLowerCase())||p.hcCode.toLowerCase().includes(q.toLowerCase())).slice(0,5);
+  if(!res.length){box.style.display="none";return;}
+  box.innerHTML=res.map(p=>`<div class="pac-sug" onclick="selPac('${p.nombre}')"><div>${p.nombre}</div><div class="pac-sug-hc">${p.hcCode} · ${p.tipo}</div></div>`).join("");
+  box.style.display="block";
+}
+
+function selPac(nombre){
+  document.getElementById("m-nombre").value=nombre;
+  document.getElementById("pac-sugeridos").style.display="none";
+}
+
+function eliminar(dk,idx,e){
+  if(e)e.stopPropagation();
+  if(!confirm("¿Eliminar esta consulta?"))return;
+  agenda[dk].splice(idx,1);
+  if(!agenda[dk].length)delete agenda[dk];
+  guardar();renderAgenda();renderHoy();actualizarStatHoy();
+}
+
+function abrirAplazar(dk,idx){
+  mDia=dk;mEditIdx=idx;
+  const c=agenda[dk][idx];
+  document.getElementById("modal-ttl").textContent="Reagendar consulta";
+  document.getElementById("modal-sub").textContent=c.nombre+" — "+fmtH(c.horaInicio);
+  document.getElementById("m-nombre").value=c.nombre;
+  document.getElementById("m-nombre").disabled=true;
+  document.getElementById("hora-field").style.display="none";
+  document.getElementById("monto-field").style.display="none";
+  document.getElementById("aplazar-panel").style.display="block";
+  document.getElementById("btn-confirm-m").style.display="none";
+  document.getElementById("modal-conflict").style.display="none";
+  const man=new Date();man.setDate(man.getDate()+1);
+  document.getElementById("apl-fecha").min=fk(man);
+  document.getElementById("apl-fecha").value="";
+  document.getElementById("apl-hora").innerHTML="";
+  document.getElementById("modal-wrap").classList.add("open");
+}
+
+function poblarHorasApl(dk2){
+  const sel=document.getElementById("apl-hora");sel.innerHTML="";
+  for(let m=H_INI*60;m+dur<=H_FIN*60;m+=15){
+    const conf=choca(dk2,m,dur,-1);
+    const o=document.createElement("option");o.value=m;
+    o.textContent=fmtH(m)+(conf?" — Ocupado":"");o.disabled=conf;
+    sel.appendChild(o);
+  }
+}
+
+function confirmarAplazar(){
+  const f=document.getElementById("apl-fecha").value;
+  const h=parseInt(document.getElementById("apl-hora").value);
+  if(!f){alert("Elige una fecha");return;}
+  if(choca(f,h,dur,-1)){alert("Conflicto de horario.");return;}
+  const c={...agenda[mDia][mEditIdx]};
+  agenda[mDia][mEditIdx].estado="aplazada";
+  if(!agenda[f])agenda[f]=[];
+  agenda[f].push({...c,horaInicio:h,duracion:dur,estado:"",reagendada:true});
+  guardar();cerrarModal();renderAgenda();renderHoy();actualizarStatHoy();
+}
+
+function renderStats(){
+  const dias=parseInt(document.getElementById("stats-periodo").value);
+  const ahora=new Date();
+  let total=0,asistio=0,noasistio=0,aplazada=0;
+  Object.keys(agenda).forEach(dk=>{
+    const fecha=new Date(dk+"T00:00:00");
+    const diffDias=Math.round((ahora-fecha)/(1000*60*60*24));
+    if(dias>0&&diffDias>dias)return;
+    (agenda[dk]||[]).forEach(c=>{
+      total++;
+      if(c.estado==="asistio")asistio++;
+      else if(c.estado==="no-asistio")noasistio++;
+      else if(c.estado==="aplazada")aplazada++;
+    });
+  });
+  const pct=n=>total>0?Math.round(n/total*100):0;
+  document.getElementById("s-total").textContent=total;
+  document.getElementById("sp-total").textContent="consultas registradas";
+  [["asistio",asistio],["noasistio",noasistio],["aplazada",aplazada]].forEach(([id,val])=>{
+    document.getElementById("s-"+id).textContent=val;
+    document.getElementById("sb-"+id).style.width=pct(val)+"%";
+    document.getElementById("sp-"+id).textContent=pct(val)+"%";
+  });
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+  document.getElementById("modal-wrap").addEventListener("click",e=>{if(e.target===document.getElementById("modal-wrap"))cerrarModal();});
+  document.getElementById("monto-modal").addEventListener("click",e=>{if(e.target===document.getElementById("monto-modal"))document.getElementById("monto-modal").classList.remove("open");});
+  document.addEventListener("keydown",e=>{
+    if(e.key==="Escape"){cerrarModal();document.getElementById("monto-modal").classList.remove("open");}
+  });
+  document.addEventListener("click",e=>{
+    if(!e.target.closest("#m-nombre")&&!e.target.closest("#pac-sugeridos"))document.getElementById("pac-sugeridos").style.display="none";
+  });
+});
+
+cargar();initBanner();renderAgenda();renderStats();
+</script>
+</body>
+</html>
