@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q59H3R7N4M"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MedHC — Sistema Integral</title>
+  
+  <style>
+    /* 2. ESTILOS UNIFICADOS */
+    :root {
+      --cobalt:#1A3A6E; --accent:#0891B2; --surface:#FFFFFF; --bg:#F4F6F9;
+      --border:#D1DCE8; --mid:#4A5568; --danger:#DC2626;
+    }
+    
+    /* Layout para alternar vistas */
+    #app { display: flex; height: 100vh; overflow: hidden; }
+    .view-section { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+    .view-section.active { display: flex; }
+
+    /* Sidebar original de app.html */
+    #sidebar { width: 265px; background: var(--surface); border-right: 2px solid var(--border); display: flex; flex-direction: column; }
+    
+    /* 3. MENÚ DE NAVEGACIÓN (Nuevo) */
+    .nav-tabs { padding: 10px; border-bottom: 1px solid var(--border); }
+    .nav-btn { 
+      width: 100%; padding: 12px; margin-bottom: 5px; border: none; border-radius: 8px; 
+      text-align: left; font-weight: 700; cursor: pointer; background: transparent; color: var(--mid);
+    }
+    .nav-btn.active { background: var(--cobalt); color: white; }
+
+    /* Estilos del Dashboard (de dashboard-medhc.html) */
+    .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; padding: 24px; }
+    .stat-card { background: white; padding: 20px; border-radius: 12px; border: 1.5px solid var(--border); }
+
+    /* Estilos de Historia Clínica (de app.html) */
+    #tcontent { flex: 1; overflow-y: auto; padding: 24px; }
+    
+    /* Botón flotante con LOGO (Solicitado) */
+    #medhc-mic {
+      position: fixed; bottom: 20px; right: 20px; z-index: 1000;
+      background: linear-gradient(135deg, var(--cobalt), var(--accent));
+      border: none; border-radius: 30px; padding: 10px 20px; color: white;
+      display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .mic-logo-icon { width: 24px; height: 24px; } /* Aquí va tu logo */
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <aside id="sidebar">
+    <div id="sh">
+      <div id="logo-row">
+        <div id="logo-icon">
+          <img src="logo-medhc.png" alt="MedHC" style="width:45px;">
+        </div>
+        <div>
+          <div style="font-weight:800; color:var(--cobalt);">MedHC</div>
+          <div style="font-size:10px; color:var(--mid);">Clinical System</div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="nav-tabs">
+      <button class="nav-btn active" onclick="showView('dash')">📊 Dashboard</button>
+      <button class="nav-btn" onclick="showView('clinica')">📄 Historia Clínica</button>
+    </nav>
+
+    <div id="srch-wrap">
+       <input type="text" id="srch" placeholder="Buscar paciente...">
+    </div>
+    <div id="plist">
+       </div>
+  </aside>
+
+  <main id="main">
+    
+    <section id="view-dash" class="view-section active">
+      <header style="padding:15px; background:white; border-bottom:1px solid var(--border);">
+        <h2 style="font-size:16px;">Panel de Control Administrativo</h2>
+      </header>
+      <div class="dash-grid">
+         <div class="stat-card">
+            <small>PACIENTES ACTIVOS</small>
+            <div id="count-pacientes" style="font-size:24px; font-weight:800; color:var(--accent);">0</div>
+         </div>
+         </div>
+    </section>
+
+    <section id="view-clinica" class="view-section">
+      <div id="phdr">
+        <button id="btn-back">← Volver</button>
+        <h2 id="pname-display">Nuevo Paciente</h2>
+      </div>
+      <div id="tcontent">
+        <div class="sec">
+          <div class="sec-hdr">
+            <div class="sec-num">1</div>
+            <h2 class="sec-ttl">Motivo de consulta</h2>
+          </div>
+          <div class="sec-body">
+            <textarea id="motivo" placeholder="Escriba o use el dictado..."></textarea>
+          </div>
+        </div>
+        </div>
+    </section>
+  </main>
+</div>
+
+<button id="medhc-mic">
+  <img src="logo-small.png" class="mic-logo-icon" alt="L">
+  <span id="mic-label">Díctale a MedHC</span>
+</button>
+
+<script>
+  // LÓGICA DE NAVEGACIÓN
+  function showView(view) {
+    document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    
+    if(view === 'dash') {
+      document.getElementById('view-dash').classList.add('active');
+      event.currentTarget.classList.add('active');
+    } else {
+      document.getElementById('view-clinica').classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+  }
+
+  // INTEGRACIÓN DE SCRIPTS ORIGINALES
+  // Copia aquí todas las funciones de app.html (Firebase, Dictado, Diagnósticos)
+  // y las funciones de carga de datos de dashboard-medhc.html
+</script>
+
+</body>
+</html>
+
