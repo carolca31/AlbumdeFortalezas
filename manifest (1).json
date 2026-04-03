@@ -1,0 +1,58 @@
+{
+  "name": "Mi Álbum de Fortalezas",
+  "short_name": "Mi Álbum",
+  "description": "App de desarrollo socioemocional infantil para psicólogos y sus pacientes",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F7F3FF",
+  "theme_color": "#6C3DE8",
+  "orientation": "portrait-primary",
+  "categories": ["education", "health"],
+  "icons": [
+    {
+      "src": "icons/icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icons/icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icons/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icons/icon-256.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Mi Álbum",
+      "short_name": "Álbum",
+      "description": "Ir al inicio",
+      "url": "/?section=inicio"
+    }
+  ]
+}

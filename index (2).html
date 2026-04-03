@@ -1,0 +1,1557 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#6C3DE8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Mi Álbum">
+<link rel="manifest" href="manifest.json">
+<title>Mi Álbum de Fortalezas ✨</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<style>
+:root {
+  --rosa: #FF6B9D;
+  --morado: #6C3DE8;
+  --amarillo: #FFD166;
+  --verde: #06D6A0;
+  --azul: #4CC9F0;
+  --naranja: #FF9F1C;
+  --bg: #F7F3FF;
+  --texto: #2D1B69;
+  --blanco: #FFFFFF;
+  --sombra: 0 8px 32px rgba(108,61,232,0.12);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ====== PANTALLA DE CARGA ====== */
+#pantalla-carga {
+  position: fixed; inset: 0; z-index: 9999;
+  background: linear-gradient(135deg, #6C3DE8, #FF6B9D, #4CC9F0);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 20px;
+  animation: gradientFlow 4s ease infinite;
+  background-size: 300% 300%;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.carga-logo {
+  font-size: 72px;
+  animation: bounce 1s ease-in-out infinite alternate;
+}
+
+@keyframes bounce {
+  from { transform: translateY(0) scale(1); }
+  to { transform: translateY(-20px) scale(1.1); }
+}
+
+.carga-titulo {
+  font-family: 'Baloo 2', cursive;
+  font-size: 2rem; font-weight: 800;
+  color: white; text-align: center;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.2);
+}
+
+.carga-dots {
+  display: flex; gap: 8px;
+}
+
+.carga-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%; background: rgba(255,255,255,0.7);
+  animation: dotPulse 1.2s ease-in-out infinite;
+}
+
+.carga-dot:nth-child(2) { animation-delay: 0.2s; }
+.carga-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes dotPulse {
+  0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+  40% { transform: scale(1.2); opacity: 1; }
+}
+
+/* ====== LOGIN ====== */
+#pantalla-login {
+  display: none;
+  min-height: 100vh;
+  background: linear-gradient(160deg, #F7F3FF 0%, #FFF0FA 50%, #F0FFFC 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-bg-deco {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.login-bg-deco.d1 {
+  width: 400px; height: 400px;
+  top: -150px; right: -100px;
+  background: radial-gradient(circle, rgba(108,61,232,0.12), transparent 70%);
+}
+
+.login-bg-deco.d2 {
+  width: 300px; height: 300px;
+  bottom: -100px; left: -80px;
+  background: radial-gradient(circle, rgba(255,107,157,0.12), transparent 70%);
+}
+
+.login-container {
+  position: relative; z-index: 1;
+  max-width: 420px; margin: 0 auto;
+  padding: 40px 24px;
+  display: flex; flex-direction: column;
+  align-items: center; min-height: 100vh;
+  justify-content: center;
+}
+
+.login-hero {
+  text-align: center; margin-bottom: 40px;
+}
+
+.login-emoji {
+  font-size: 80px; display: block;
+  margin-bottom: 16px;
+  animation: flotando 3s ease-in-out infinite;
+}
+
+@keyframes flotando {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-12px) rotate(3deg); }
+}
+
+.login-titulo {
+  font-family: 'Baloo 2', cursive;
+  font-size: 2.2rem; font-weight: 800;
+  background: linear-gradient(135deg, var(--morado), var(--rosa));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.1; margin-bottom: 8px;
+}
+
+.login-subtitulo {
+  color: #7B68B5; font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Tab selector */
+.login-tabs {
+  display: flex; background: white;
+  border-radius: 16px; padding: 4px;
+  box-shadow: var(--sombra);
+  margin-bottom: 24px; width: 100%;
+}
+
+.login-tab {
+  flex: 1; padding: 10px;
+  border: none; background: none;
+  border-radius: 12px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.9rem; font-weight: 700;
+  cursor: pointer; color: #888;
+  transition: all 0.2s;
+}
+
+.login-tab.activo {
+  background: linear-gradient(135deg, var(--morado), var(--rosa));
+  color: white;
+  box-shadow: 0 4px 16px rgba(108,61,232,0.3);
+}
+
+/* Form card */
+.login-card {
+  background: white;
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: var(--sombra);
+  width: 100%;
+}
+
+.login-field { margin-bottom: 18px; }
+
+.login-label {
+  display: block; font-size: 0.82rem;
+  font-weight: 800; color: #7B68B5;
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.login-input {
+  width: 100%; border: 2px solid #E8E4F4;
+  border-radius: 14px; padding: 12px 16px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem; font-weight: 600;
+  color: var(--texto); background: #FAFAFA;
+  outline: none; transition: all 0.2s;
+}
+
+.login-input:focus {
+  border-color: var(--morado);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(108,61,232,0.08);
+}
+
+.login-btn {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, var(--morado), var(--rosa));
+  color: white; border: none;
+  border-radius: 16px;
+  font-family: 'Baloo 2', cursive;
+  font-size: 1.15rem; font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(108,61,232,0.35);
+  transition: all 0.2s; margin-top: 8px;
+}
+
+.login-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(108,61,232,0.45); }
+.login-btn:active { transform: scale(0.98); }
+
+.login-error {
+  background: #FFE4E4; border-left: 4px solid #FF6B6B;
+  border-radius: 12px; padding: 12px 16px;
+  color: #C0392B; font-weight: 700; font-size: 0.9rem;
+  margin-top: 12px; display: none;
+}
+
+/* ====== APP PRINCIPAL ====== */
+#app { display: none; }
+
+/* Header */
+.app-header {
+  position: sticky; top: 0; z-index: 100;
+  background: white;
+  border-bottom: 2px solid rgba(108,61,232,0.1);
+  box-shadow: 0 2px 20px rgba(108,61,232,0.08);
+}
+
+.header-top {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+}
+
+.header-nombre {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1.1rem; font-weight: 800;
+  color: var(--texto);
+  display: flex; align-items: center; gap: 8px;
+}
+
+.header-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--morado), var(--rosa));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+
+.header-semana {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.78rem; color: #7B68B5;
+  font-weight: 700;
+}
+
+.semana-badge {
+  background: linear-gradient(135deg, var(--morado), var(--azul));
+  color: white; padding: 3px 10px;
+  border-radius: 20px; font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.btn-logout {
+  background: none; border: 2px solid #E8E4F4;
+  border-radius: 10px; padding: 6px 12px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.8rem; font-weight: 700;
+  color: #888; cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-logout:hover { border-color: var(--rosa); color: var(--rosa); }
+
+/* Barra progreso header */
+.header-progress {
+  height: 4px;
+  background: linear-gradient(90deg, var(--morado), var(--rosa), var(--verde));
+  transition: width 0.6s ease;
+}
+
+/* Nav */
+nav {
+  overflow-x: auto; scrollbar-width: none;
+  display: flex; padding: 0 16px; gap: 2px;
+  background: white; border-top: 1px solid rgba(0,0,0,0.05);
+}
+nav::-webkit-scrollbar { display: none; }
+
+.nav-btn {
+  flex-shrink: 0; border: none; background: none;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.8rem; font-weight: 800;
+  padding: 12px 14px; cursor: pointer;
+  color: #aaa; border-bottom: 3px solid transparent;
+  transition: all 0.2s; white-space: nowrap;
+  display: flex; align-items: center; gap: 5px;
+}
+
+.nav-btn.activo { color: var(--morado); border-bottom-color: var(--morado); }
+.nav-btn:hover { color: var(--morado); }
+
+/* ====== CONTENIDO ====== */
+.contenido {
+  max-width: 900px; margin: 0 auto;
+  padding: 24px 16px 100px;
+}
+
+.seccion { display: none; }
+.seccion.activa { display: block; animation: aparecer 0.35s ease; }
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Títulos de sección */
+.sec-titulo {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1.8rem; font-weight: 800;
+  color: var(--texto); margin-bottom: 4px;
+  display: flex; align-items: center; gap: 10px;
+}
+
+.sec-desc {
+  color: #7B68B5; font-size: 0.92rem;
+  font-weight: 600; margin-bottom: 24px;
+}
+
+/* ====== TARJETAS ESTADÍSTICA ====== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px; margin-bottom: 24px;
+}
+
+.stat-card {
+  background: white; border-radius: 18px;
+  padding: 16px 12px; text-align: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  transition: transform 0.2s;
+}
+
+.stat-card:hover { transform: translateY(-3px); }
+
+.stat-num {
+  font-family: 'Baloo 2', cursive;
+  font-size: 2rem; font-weight: 800;
+  line-height: 1; margin-bottom: 4px;
+}
+
+.stat-lbl {
+  font-size: 0.7rem; font-weight: 800;
+  color: #aaa; text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* ====== SEMANA ====== */
+.semana-widget {
+  background: white; border-radius: 20px;
+  padding: 20px; margin-bottom: 20px;
+  box-shadow: var(--sombra);
+  display: flex; align-items: center; gap: 16px;
+}
+
+.semana-num {
+  font-family: 'Baloo 2', cursive;
+  font-size: 3rem; font-weight: 800;
+  color: var(--morado); line-height: 1;
+  min-width: 56px; text-align: center;
+}
+
+.semana-info { flex: 1; min-width: 0; }
+
+.semana-lbl {
+  font-size: 0.72rem; font-weight: 800;
+  color: #bbb; text-transform: uppercase;
+  letter-spacing: 1px; margin-bottom: 2px;
+}
+
+.semana-fase-txt {
+  font-size: 0.95rem; font-weight: 700;
+  color: var(--texto); margin-bottom: 8px;
+}
+
+.barra-wrap {
+  background: #F0EBF8; border-radius: 50px;
+  height: 10px; overflow: hidden;
+}
+
+.barra-fill {
+  height: 100%; border-radius: 50px;
+  background: linear-gradient(90deg, var(--morado), var(--rosa));
+  transition: width 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.btn-semana {
+  flex-shrink: 0; background: linear-gradient(135deg, var(--amarillo), var(--naranja));
+  border: none; border-radius: 12px; padding: 10px 16px;
+  font-family: 'Baloo 2', cursive; font-size: 0.85rem; font-weight: 800;
+  color: white; cursor: pointer; transition: transform 0.15s;
+  box-shadow: 0 4px 16px rgba(255,159,28,0.35);
+}
+
+.btn-semana:hover { transform: scale(1.05); }
+
+/* Fases */
+.fases-row {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.fase-chip {
+  padding: 6px 14px; border-radius: 20px;
+  font-size: 0.78rem; font-weight: 800;
+  display: flex; align-items: center; gap: 5px;
+}
+
+.fase-chip.completada { background: #E8FFF5; color: #00A878; }
+.fase-chip.actual { background: linear-gradient(135deg, #FFE8F5, #F0E8FF); color: var(--morado); }
+.fase-chip.pendiente { background: #F5F5F5; color: #ccc; }
+
+/* ====== FORMULARIO ====== */
+.formulario {
+  background: white; border-radius: 24px;
+  padding: 24px; margin-bottom: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  border: 2px dashed rgba(108,61,232,0.15);
+}
+
+.form-titulo {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1.1rem; font-weight: 800;
+  color: var(--texto); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.form-grupo { margin-bottom: 16px; }
+
+.form-label {
+  display: block; font-size: 0.78rem;
+  font-weight: 800; color: #7B68B5;
+  text-transform: uppercase; letter-spacing: 0.8px;
+  margin-bottom: 6px;
+}
+
+.form-input, .form-select, .form-textarea {
+  width: 100%; border: 2px solid #E8E4F4;
+  border-radius: 14px; padding: 11px 14px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.95rem; font-weight: 600;
+  color: var(--texto); background: #FAFAFA;
+  outline: none; transition: all 0.2s;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--morado); background: white;
+  box-shadow: 0 0 0 4px rgba(108,61,232,0.08);
+}
+
+.form-textarea { resize: vertical; min-height: 76px; }
+
+/* Emoji picker */
+.emoji-picker {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  padding: 12px; background: #FAFAFA;
+  border-radius: 14px; border: 2px solid #E8E4F4;
+}
+
+.emoji-op {
+  font-size: 22px; cursor: pointer; padding: 5px;
+  border-radius: 8px; transition: all 0.15s;
+  border: 2px solid transparent; user-select: none;
+}
+
+.emoji-op:hover { transform: scale(1.25); background: #f0f0f0; }
+.emoji-op.sel { border-color: var(--rosa); background: #FFE8F5; transform: scale(1.2); }
+
+/* Botones guardado */
+.btn-guardar {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, var(--morado), var(--rosa));
+  color: white; border: none; border-radius: 16px;
+  font-family: 'Baloo 2', cursive;
+  font-size: 1.05rem; font-weight: 800;
+  cursor: pointer; margin-top: 4px;
+  box-shadow: 0 4px 20px rgba(108,61,232,0.3);
+  transition: all 0.2s;
+}
+
+.btn-guardar:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(108,61,232,0.4); }
+.btn-guardar:active { transform: scale(0.98); }
+
+/* ====== TARJETAS ====== */
+.tarjetas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px; margin-bottom: 20px;
+}
+
+.tarjeta {
+  background: white; border-radius: 20px;
+  padding: 18px; box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+  border: 2px solid transparent;
+  position: relative; overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tarjeta:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,0.12); }
+
+.tarjeta::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 5px;
+}
+
+.tarjeta.logro::before { background: linear-gradient(90deg, var(--amarillo), var(--naranja)); }
+.tarjeta.cualidad::before { background: linear-gradient(90deg, var(--rosa), var(--morado)); }
+.tarjeta.habilidad::before { background: linear-gradient(90deg, var(--naranja), var(--rosa)); }
+.tarjeta.momento::before { background: linear-gradient(90deg, var(--verde), var(--azul)); }
+.tarjeta.emocion::before { background: linear-gradient(90deg, var(--azul), var(--morado)); }
+.tarjeta.social::before { background: linear-gradient(90deg, var(--verde), var(--amarillo)); }
+.tarjeta.plan::before { background: linear-gradient(90deg, var(--morado), var(--azul)); }
+
+.tarjeta-emoji { font-size: 30px; margin-bottom: 8px; display: block; }
+.tarjeta-texto { font-size: 0.92rem; color: var(--texto); font-weight: 700; margin-bottom: 4px; line-height: 1.35; }
+.tarjeta-meta { font-size: 0.78rem; color: #bbb; font-weight: 600; }
+.tarjeta-fecha { font-size: 0.72rem; color: #bbb; font-weight: 600; margin-top: 4px; }
+
+.tarjeta-semana {
+  display: inline-block; font-size: 0.68rem;
+  font-weight: 800; padding: 2px 8px;
+  border-radius: 20px; margin-top: 8px;
+}
+
+.tarjeta.logro .tarjeta-semana { background: #FFF3D0; color: var(--naranja); }
+.tarjeta.cualidad .tarjeta-semana { background: #FFE8F5; color: var(--rosa); }
+.tarjeta.habilidad .tarjeta-semana { background: #FFF0E8; color: var(--naranja); }
+.tarjeta.momento .tarjeta-semana { background: #E0FFF5; color: #00A878; }
+.tarjeta.emocion .tarjeta-semana { background: #E0F4FF; color: #0077B6; }
+.tarjeta.social .tarjeta-semana { background: #E8FFF5; color: #00A878; }
+.tarjeta.plan .tarjeta-semana { background: #F0E8FF; color: var(--morado); }
+
+.btn-del {
+  position: absolute; top: 10px; right: 10px;
+  background: none; border: none; font-size: 15px;
+  cursor: pointer; opacity: 0.25; transition: opacity 0.2s;
+}
+.btn-del:hover { opacity: 0.7; }
+
+/* Estado vacío */
+.vacio {
+  text-align: center; padding: 40px 20px; color: #ccc;
+}
+.vacio-emoji { font-size: 52px; margin-bottom: 10px; display: block; }
+.vacio p { font-weight: 700; font-size: 0.9rem; }
+
+/* ====== PRIMERA SESIÓN ====== */
+.caja-primera {
+  background: linear-gradient(135deg, #FFF0FA, #F0F0FF);
+  border: 2px solid rgba(108,61,232,0.15);
+  border-radius: 20px; padding: 22px;
+}
+
+.caja-primera-titulo {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1.1rem; font-weight: 800;
+  color: var(--texto); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.evidencia-item {
+  background: white; border-radius: 12px;
+  padding: 10px 14px; margin-bottom: 8px;
+  font-size: 0.9rem; font-weight: 600;
+  color: var(--texto); border: 1px solid #E8E4F4;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.fortaleza-input-row {
+  display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap;
+}
+
+/* ====== REESTRUCTURACIÓN ====== */
+.caja-reto {
+  background: linear-gradient(135deg, #FFF8E1, #FFF0FA);
+  border: 2px solid var(--amarillo);
+  border-radius: 20px; padding: 22px;
+  margin-bottom: 18px;
+}
+
+.caja-reto h3 {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1.15rem; color: var(--texto);
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.pens-neg {
+  background: #FFE4E4; border-left: 4px solid #FF6B6B;
+  border-radius: 0 12px 12px 0; padding: 12px 16px;
+  margin-bottom: 10px; font-weight: 700;
+  color: #C0392B; font-size: 0.95rem;
+}
+
+.pens-flecha {
+  text-align: center; font-size: 22px; margin: 6px 0;
+}
+
+.pens-pos {
+  background: #E8FFF5; border-left: 4px solid var(--verde);
+  border-radius: 0 12px 12px 0; padding: 12px 16px;
+  font-weight: 700; color: #00A878; font-size: 0.95rem;
+}
+
+/* Frases de poder */
+.frases-container {
+  background: white; border-radius: 20px;
+  padding: 22px; box-shadow: var(--sombra);
+  margin-top: 18px;
+}
+
+/* ====== EMOCIONES / MÓDULO 4 ====== */
+.emocion-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px; margin-bottom: 16px;
+}
+
+.emocion-btn {
+  aspect-ratio: 1; border: 3px solid #E8E4F4;
+  border-radius: 16px; background: white;
+  font-size: 28px; cursor: pointer;
+  transition: all 0.2s; display: flex;
+  align-items: center; justify-content: center;
+  flex-direction: column; gap: 4px;
+}
+
+.emocion-btn span:last-child {
+  font-size: 0.65rem; font-weight: 800;
+  color: #aaa; font-family: 'Nunito', sans-serif;
+}
+
+.emocion-btn:hover { transform: scale(1.08); border-color: var(--morado); }
+.emocion-btn.sel { border-color: var(--morado); background: #F0E8FF; transform: scale(1.08); }
+.emocion-btn.sel span:last-child { color: var(--morado); }
+
+/* Estrategias calma */
+.estrategias-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 10px; margin-bottom: 16px;
+}
+
+.estrategia-btn {
+  border: 2px solid #E8E4F4; border-radius: 14px;
+  padding: 14px 10px; background: white;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.82rem; font-weight: 700;
+  color: var(--texto); cursor: pointer;
+  transition: all 0.2s; text-align: center;
+  line-height: 1.3;
+}
+
+.estrategia-btn:hover { border-color: var(--verde); background: #E8FFF5; }
+.estrategia-btn.sel { border-color: var(--verde); background: #E8FFF5; color: #00A878; }
+
+/* ====== DASHBOARD PSICÓLOGO ====== */
+.dash-header {
+  background: linear-gradient(135deg, var(--morado), #8B5CF6);
+  border-radius: 24px; padding: 24px;
+  color: white; margin-bottom: 24px;
+}
+
+.dash-titulo {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1.5rem; font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.dash-sub { font-size: 0.9rem; opacity: 0.8; font-weight: 600; }
+
+.pacientes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px; margin-bottom: 24px;
+}
+
+.paciente-card {
+  background: white; border-radius: 20px;
+  padding: 20px; box-shadow: var(--sombra);
+  border: 2px solid transparent;
+  transition: all 0.2s; cursor: pointer;
+}
+
+.paciente-card:hover {
+  border-color: var(--morado);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(108,61,232,0.15);
+}
+
+.paciente-avatar {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--morado), var(--rosa));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; margin-bottom: 12px;
+}
+
+.paciente-nombre {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1.15rem; font-weight: 800;
+  color: var(--texto); margin-bottom: 2px;
+}
+
+.paciente-edad {
+  font-size: 0.8rem; color: #888;
+  font-weight: 600; margin-bottom: 10px;
+}
+
+.paciente-stats-row {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+
+.mini-stat {
+  background: #F7F3FF; border-radius: 8px;
+  padding: 4px 10px; font-size: 0.75rem;
+  font-weight: 800; color: var(--morado);
+}
+
+.btn-ver-paciente {
+  margin-top: 14px; width: 100%;
+  background: linear-gradient(135deg, var(--morado), var(--rosa));
+  color: white; border: none; border-radius: 12px;
+  padding: 10px; font-family: 'Baloo 2', cursive;
+  font-size: 0.9rem; font-weight: 800; cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-ver-paciente:hover { transform: scale(1.02); }
+
+/* Crear paciente */
+.crear-paciente-btn {
+  background: white; border-radius: 20px;
+  padding: 24px; box-shadow: var(--sombra);
+  border: 2px dashed rgba(108,61,232,0.3);
+  text-align: center; cursor: pointer;
+  transition: all 0.2s; margin-bottom: 24px;
+}
+
+.crear-paciente-btn:hover {
+  border-color: var(--morado);
+  background: #F7F3FF;
+}
+
+.crear-icon { font-size: 40px; margin-bottom: 8px; }
+
+.crear-txt {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1rem; font-weight: 800;
+  color: var(--morado);
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(45,27,105,0.5);
+  backdrop-filter: blur(4px);
+  display: none; align-items: center;
+  justify-content: center; padding: 20px;
+}
+
+.modal-overlay.visible { display: flex; }
+
+.modal-box {
+  background: white; border-radius: 28px;
+  padding: 28px; width: 100%;
+  max-width: 420px;
+  box-shadow: 0 24px 80px rgba(108,61,232,0.2);
+  animation: modalIn 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.9) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-titulo {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1.4rem; font-weight: 800;
+  color: var(--texto); margin-bottom: 20px;
+  text-align: center;
+}
+
+.modal-row {
+  display: flex; gap: 10px; margin-top: 8px;
+}
+
+.btn-cancelar {
+  flex: 1; padding: 12px; background: #F5F5F5;
+  border: none; border-radius: 14px;
+  font-family: 'Baloo 2', cursive; font-size: 0.95rem;
+  font-weight: 800; color: #888; cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-cancelar:hover { background: #eee; }
+
+.btn-crear {
+  flex: 2; padding: 12px;
+  background: linear-gradient(135deg, var(--morado), var(--rosa));
+  border: none; border-radius: 14px;
+  font-family: 'Baloo 2', cursive; font-size: 0.95rem;
+  font-weight: 800; color: white; cursor: pointer;
+  box-shadow: 0 4px 16px rgba(108,61,232,0.3);
+  transition: all 0.2s;
+}
+
+.btn-crear:hover { transform: scale(1.02); }
+
+/* Gráficas dashboard */
+.dash-chart {
+  background: white; border-radius: 20px;
+  padding: 20px; box-shadow: var(--sombra);
+  margin-bottom: 20px;
+}
+
+.dash-chart-titulo {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1.05rem; font-weight: 800;
+  color: var(--texto); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.barra-cat {
+  display: flex; align-items: center;
+  gap: 10px; margin-bottom: 10px;
+}
+
+.barra-cat-lbl {
+  font-size: 0.8rem; font-weight: 700;
+  color: #7B68B5; min-width: 90px;
+}
+
+.barra-cat-track {
+  flex: 1; height: 10px; background: #F0EBF8;
+  border-radius: 50px; overflow: hidden;
+}
+
+.barra-cat-fill {
+  height: 100%; border-radius: 50px;
+  transition: width 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.barra-cat-num {
+  font-size: 0.8rem; font-weight: 800;
+  color: var(--texto); min-width: 24px;
+  text-align: right;
+}
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 28px; left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: linear-gradient(135deg, var(--verde), var(--azul));
+  color: white; padding: 12px 24px;
+  border-radius: 50px; font-family: 'Baloo 2', cursive;
+  font-size: 0.95rem; font-weight: 700;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 10000; pointer-events: none; white-space: nowrap;
+}
+
+.toast.visible { transform: translateX(-50%) translateY(0); }
+
+/* Confeti */
+.confeti-container {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 9999; overflow: hidden;
+}
+
+.confeti-p {
+  position: absolute; top: -20px;
+  animation: caer 1.5s ease-in forwards;
+}
+
+@keyframes caer {
+  to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+/* Sync indicator */
+.sync-indicator {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 0.72rem; font-weight: 700; color: #bbb;
+  padding: 3px 8px; border-radius: 20px; background: #F5F5F5;
+}
+
+.sync-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--verde);
+}
+
+.sync-dot.syncing { animation: syncPulse 0.8s ease-in-out infinite; background: var(--amarillo); }
+
+@keyframes syncPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .tarjetas-grid { grid-template-columns: 1fr 1fr; }
+  .stats-grid { grid-template-columns: repeat(3, 1fr); }
+  .emocion-grid { grid-template-columns: repeat(4, 1fr); }
+  .estrategias-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 400px) {
+  .tarjetas-grid { grid-template-columns: 1fr; }
+}
+
+/* Módulo Pilar */
+.pilar-card {
+  background: white; border-radius: 20px;
+  padding: 18px; margin-bottom: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  border-left: 5px solid;
+}
+
+.pilar-card.p1 { border-color: var(--rosa); }
+.pilar-card.p2 { border-color: var(--amarillo); }
+.pilar-card.p3 { border-color: var(--verde); }
+.pilar-card.p4 { border-color: var(--morado); }
+
+.pilar-titulo {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1.05rem; font-weight: 800;
+  color: var(--texto); margin-bottom: 4px;
+}
+
+.pilar-sub { font-size: 0.82rem; color: #888; font-weight: 600; margin-bottom: 12px; }
+
+/* Cargando datos */
+.cargando-datos {
+  text-align: center; padding: 60px 20px;
+  color: #bbb;
+}
+
+.cargando-datos .sp {
+  font-size: 48px; margin-bottom: 12px;
+  display: block; animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Offline banner */
+.offline-banner {
+  display: none; background: #FFF3D0;
+  border-bottom: 2px solid var(--amarillo);
+  padding: 8px 16px; text-align: center;
+  font-size: 0.82rem; font-weight: 700;
+  color: var(--naranja);
+}
+
+.offline-banner.visible { display: block; }
+
+/* Nivel autoestima indicador */
+.autoestima-indicator {
+  background: linear-gradient(135deg, #FFF8E1, #FFE8F5);
+  border-radius: 16px; padding: 16px;
+  margin-bottom: 16px;
+  border: 2px solid rgba(255,209,102,0.4);
+}
+
+.autoestima-lbl {
+  font-size: 0.78rem; font-weight: 800;
+  color: #7B68B5; text-transform: uppercase;
+  letter-spacing: 0.8px; margin-bottom: 8px;
+}
+
+.autoestima-barra { display: flex; gap: 4px; }
+
+.autoestima-seg {
+  flex: 1; height: 12px; border-radius: 6px;
+  background: #E8E4F4; transition: background 0.5s;
+}
+
+.autoestima-seg.activo { background: linear-gradient(90deg, var(--amarillo), var(--naranja)); }
+</style>
+</head>
+<body>
+
+<!-- OFFLINE BANNER -->
+<div class="offline-banner" id="offline-banner">
+  📶 Sin conexión — tus datos se guardarán cuando vuelva internet
+</div>
+
+<!-- PANTALLA CARGA -->
+<div id="pantalla-carga">
+  <div class="carga-logo">🦋</div>
+  <div class="carga-titulo">Mi Álbum de<br>Fortalezas</div>
+  <div class="carga-dots">
+    <div class="carga-dot"></div>
+    <div class="carga-dot"></div>
+    <div class="carga-dot"></div>
+  </div>
+</div>
+
+<!-- PANTALLA LOGIN -->
+<div id="pantalla-login">
+  <div class="login-bg-deco d1"></div>
+  <div class="login-bg-deco d2"></div>
+  <div class="login-container">
+    <div class="login-hero">
+      <span class="login-emoji">🦋</span>
+      <div class="login-titulo">Mi Álbum de<br>Fortalezas</div>
+      <p class="login-subtitulo">¡Descubre todo lo increíble que eres!</p>
+    </div>
+
+    <div class="login-tabs">
+      <button class="login-tab activo" onclick="setTab('nino', this)">👦 Soy un niño</button>
+      <button class="login-tab" onclick="setTab('psicologo', this)">🩺 Soy psicólogo</button>
+    </div>
+
+    <div class="login-card">
+      <div class="form-grupo">
+        <label class="login-label">👤 Mi nombre de usuario</label>
+        <input id="login-user" class="login-input" type="text" placeholder="Tu nombre..." autocomplete="username">
+      </div>
+      <div class="form-grupo" style="margin-bottom: 0">
+        <label class="login-label">🔑 Mi contraseña secreta</label>
+        <input id="login-pass" class="login-input" type="password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <div id="login-error" class="login-error"></div>
+      <button class="login-btn" onclick="iniciarSesion()">
+        ✨ ¡Entrar a mi álbum!
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- APP PRINCIPAL -->
+<div id="app">
+  <div class="app-header">
+    <div class="header-top">
+      <div class="header-nombre">
+        <div class="header-avatar" id="header-avatar">🦋</div>
+        <div>
+          <div id="header-nombre-txt">Hola!</div>
+          <div class="sync-indicator" id="sync-indicator">
+            <div class="sync-dot" id="sync-dot"></div>
+            <span id="sync-txt">Sincronizado</span>
+          </div>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div class="header-semana">
+          <span class="semana-badge" id="header-semana-badge">S1</span>
+        </div>
+        <button class="btn-logout" onclick="cerrarSesion()">Salir</button>
+      </div>
+    </div>
+    <div class="header-progress" id="header-progress" style="width: 12.5%"></div>
+
+    <!-- NAV -->
+    <nav id="nav-nino" style="display:none">
+      <button class="nav-btn activo" onclick="ir('inicio',this)">🏠 Inicio</button>
+      <button class="nav-btn" onclick="ir('yo-soy',this)">💎 Yo Soy</button>
+      <button class="nav-btn" onclick="ir('soy-capaz',this)">🎯 Soy Capaz</button>
+      <button class="nav-btn" onclick="ir('me-conecto',this)">❤️ Me Conecto</button>
+      <button class="nav-btn" onclick="ir('mente-fuerte',this)">🧠 Mi Mente</button>
+      <button class="nav-btn" onclick="ir('reto',this)" id="nav-reto">💪 ¡Puedo!</button>
+    </nav>
+
+    <nav id="nav-psicologo" style="display:none">
+      <button class="nav-btn activo" onclick="ir('dash-inicio',this)">📊 Dashboard</button>
+      <button class="nav-btn" onclick="ir('mis-pacientes',this)">👥 Pacientes</button>
+      <button class="nav-btn" onclick="ir('perfil-paciente',this)" id="nav-perfil">📋 Ver Paciente</button>
+    </nav>
+  </div>
+
+  <div class="contenido" id="contenido">
+
+    <!-- ===== INICIO NIÑO ===== -->
+    <div id="inicio" class="seccion activa">
+      <div style="display:flex; justify-content:space-between; align-items:start; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
+        <div>
+          <div class="sec-titulo" id="saludo-inicio">👋 ¡Hola!</div>
+          <p class="sec-desc">Este es tu álbum especial. ¡Aquí vive todo lo genial que eres! 🌟</p>
+        </div>
+      </div>
+
+      <!-- Semana widget -->
+      <div class="semana-widget">
+        <div class="semana-num" id="semana-num">1</div>
+        <div class="semana-info">
+          <div class="semana-lbl">Semana del programa</div>
+          <div class="semana-fase-txt" id="semana-fase-txt">🌱 Conociendo mis fortalezas</div>
+          <div class="barra-wrap">
+            <div class="barra-fill" id="barra-semana" style="width:12.5%"></div>
+          </div>
+          <div style="font-size:0.72rem; color:#bbb; font-weight:700; margin-top:2px;" id="semana-meta-txt">Semana 1 de 8</div>
+        </div>
+        <button class="btn-semana" id="btn-avanzar-semana" onclick="avanzarSemana()" style="display:none">+1 Semana</button>
+      </div>
+
+      <div class="fases-row" id="fases-container"></div>
+
+      <!-- Nivel autoestima -->
+      <div class="autoestima-indicator">
+        <div class="autoestima-lbl">⭐ Mi nivel de fortalezas esta semana</div>
+        <div class="autoestima-barra" id="autoestima-barra">
+          <div class="autoestima-seg"></div>
+          <div class="autoestima-seg"></div>
+          <div class="autoestima-seg"></div>
+          <div class="autoestima-seg"></div>
+          <div class="autoestima-seg"></div>
+          <div class="autoestima-seg"></div>
+          <div class="autoestima-seg"></div>
+          <div class="autoestima-seg"></div>
+          <div class="autoestima-seg"></div>
+          <div class="autoestima-seg"></div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--rosa)" id="st-cualidad">0</div>
+          <div class="stat-lbl">💎 Cualidades</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--amarillo)" id="st-logro">0</div>
+          <div class="stat-lbl">🏆 Logros</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--naranja)" id="st-habilidad">0</div>
+          <div class="stat-lbl">⚡ Habilidades</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--verde)" id="st-social">0</div>
+          <div class="stat-lbl">❤️ Conexiones</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--azul)" id="st-emocion">0</div>
+          <div class="stat-lbl">🧠 Emociones</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="background:linear-gradient(135deg,var(--rosa),var(--morado));-webkit-background-clip:text;-webkit-text-fill-color:transparent" id="st-total">0</div>
+          <div class="stat-lbl">🌟 Total</div>
+        </div>
+      </div>
+
+      <!-- Fortalezas iniciales sesión 1 -->
+      <div class="caja-primera">
+        <div class="caja-primera-titulo">💡 Mis 3 primeras fortalezas (Sesión 1)</div>
+        <div id="cont-fortalezas-iniciales">
+          <div class="evidencia-item" style="color:#bbb;font-style:italic;">
+            💭 ¡Las agregaremos juntos en la primera sesión!
+          </div>
+        </div>
+        <div class="fortaleza-input-row" id="fi-row">
+          <input id="fi-input" class="form-input" style="flex:1;min-width:160px" placeholder="Escribe una fortaleza...">
+          <button class="btn-guardar" style="width:auto;padding:10px 18px;font-size:0.9rem" onclick="agregarFortalezaInicial()">✨ Guardar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PILAR 1: YO SOY ESPECIAL ===== -->
+    <div id="yo-soy" class="seccion">
+      <div class="sec-titulo" style="color:var(--rosa)">💎 Yo Soy Especial</div>
+      <p class="sec-desc">Autoestima y autoconcepto — ¡Descubre todo lo que te hace único/a! 🌸</p>
+
+      <!-- Subcategorías -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+        <button class="estrategia-btn sel" onclick="setCatP1('cualidad',this)" style="flex:1;min-width:120px">💎 Mis cualidades</button>
+        <button class="estrategia-btn" onclick="setCatP1('habilidad',this)" style="flex:1;min-width:120px">⚡ Mis habilidades</button>
+        <button class="estrategia-btn" onclick="setCatP1('me-gusta',this)" style="flex:1;min-width:120px">❤️ Lo que me gusta de mí</button>
+        <button class="estrategia-btn" onclick="setCatP1('aprendiendo',this)" style="flex:1;min-width:120px">🌱 Estoy aprendiendo</button>
+      </div>
+
+      <div class="formulario">
+        <div class="form-titulo" id="p1-form-titulo">➕ Agregar una cualidad</div>
+        <div class="form-grupo">
+          <label class="form-label" id="p1-form-lbl">¿Cuál es tu cualidad especial?</label>
+          <input id="p1-texto" class="form-input" placeholder="Ej: Soy muy creativa...">
+        </div>
+        <div class="form-grupo">
+          <label class="form-label">Elige un emoji</label>
+          <div class="emoji-picker" id="emoji-p1">
+            <span class="emoji-op sel" onclick="selEmoji(this,'p1')">💎</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p1')">⭐</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p1')">🌸</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p1')">💪</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p1')">🦋</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p1')">🌟</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p1')">🎨</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p1')">🌈</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p1')">❤️</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p1')">🌺</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p1')">✨</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p1')">🎯</span>
+          </div>
+        </div>
+        <button class="btn-guardar" style="background:linear-gradient(135deg,var(--rosa),var(--morado))" onclick="guardarP1()">
+          💎 ¡Guardar en mi álbum!
+        </button>
+      </div>
+
+      <div class="tarjetas-grid" id="grid-p1"></div>
+      <div class="vacio" id="vacio-p1">
+        <span class="vacio-emoji">💎</span>
+        <p>¡Tienes cualidades únicas! Empieza a escribirlas 🌟</p>
+      </div>
+    </div>
+
+    <!-- ===== PILAR 2: SOY CAPAZ ===== -->
+    <div id="soy-capaz" class="seccion">
+      <div class="sec-titulo" style="color:var(--amarillo)">🎯 Soy Capaz</div>
+      <p class="sec-desc">Logros y motivación — ¡Todo lo que has conseguido! 🏆</p>
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+        <button class="estrategia-btn sel" onclick="setCatP2('logro',this)" style="flex:1;min-width:130px">🏆 Mis logros</button>
+        <button class="estrategia-btn" onclick="setCatP2('supere',this)" style="flex:1;min-width:130px">💪 Algo que superé</button>
+        <button class="estrategia-btn" onclick="setCatP2('quiero-intentar',this)" style="flex:1;min-width:130px">🚀 Quiero intentar</button>
+      </div>
+
+      <div class="formulario">
+        <div class="form-titulo" id="p2-form-titulo">➕ Agregar un logro</div>
+        <div class="form-grupo">
+          <label class="form-label" id="p2-form-lbl">¿Cuál fue tu logro?</label>
+          <input id="p2-texto" class="form-input" placeholder="Ej: Saqué buena nota en matemáticas...">
+        </div>
+        <div class="form-grupo">
+          <label class="form-label">Elige un emoji</label>
+          <div class="emoji-picker" id="emoji-p2">
+            <span class="emoji-op sel" onclick="selEmoji(this,'p2')">🏆</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p2')">⭐</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p2')">📚</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p2')">✏️</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p2')">🥇</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p2')">💡</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p2')">🎒</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p2')">🔢</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p2')">🌈</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p2')">🚀</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p2')">💪</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p2')">🎓</span>
+          </div>
+        </div>
+        <button class="btn-guardar" style="background:linear-gradient(135deg,var(--amarillo),var(--naranja));box-shadow:0 4px 20px rgba(255,159,28,0.35)" onclick="guardarP2()">
+          🏆 ¡Guardar mi logro!
+        </button>
+      </div>
+
+      <div class="tarjetas-grid" id="grid-p2"></div>
+      <div class="vacio" id="vacio-p2">
+        <span class="vacio-emoji">🏆</span>
+        <p>¡Pronto llenarás esto de trofeos! ⭐</p>
+      </div>
+    </div>
+
+    <!-- ===== PILAR 3: ME CONECTO CON OTROS ===== -->
+    <div id="me-conecto" class="seccion">
+      <div class="sec-titulo" style="color:var(--verde)">❤️ Me Conecto con Otros</div>
+      <p class="sec-desc">Habilidades socioemocionales — ¡Las personas y momentos especiales! 🤝</p>
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+        <button class="estrategia-btn sel" onclick="setCatP3('momento',this)" style="flex:1;min-width:120px">😊 Momentos felices</button>
+        <button class="estrategia-btn" onclick="setCatP3('ayude',this)" style="flex:1;min-width:120px">🤝 Ayudé a alguien</button>
+        <button class="estrategia-btn" onclick="setCatP3('problema',this)" style="flex:1;min-width:120px">🧩 Resolví un problema</button>
+        <button class="estrategia-btn" onclick="setCatP3('compartir',this)" style="flex:1;min-width:120px">🎉 Compartí con otros</button>
+      </div>
+
+      <div class="formulario">
+        <div class="form-titulo" id="p3-form-titulo">➕ Guardar un momento feliz</div>
+        <div class="form-grupo">
+          <label class="form-label" id="p3-form-lbl">¿Qué pasó?</label>
+          <textarea id="p3-texto" class="form-textarea" placeholder="Cuéntame sobre ese momento especial..."></textarea>
+        </div>
+        <div class="form-grupo">
+          <label class="form-label">Elige un emoji</label>
+          <div class="emoji-picker" id="emoji-p3">
+            <span class="emoji-op sel" onclick="selEmoji(this,'p3')">😊</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p3')">❤️</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p3')">🤝</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p3')">🎉</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p3')">🌅</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p3')">👨‍👩‍👧</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p3')">🐾</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p3')">🎂</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p3')">🤗</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p3')">🧩</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p3')">🌸</span>
+            <span class="emoji-op" onclick="selEmoji(this,'p3')">💫</span>
+          </div>
+        </div>
+        <button class="btn-guardar" style="background:linear-gradient(135deg,var(--verde),var(--azul));box-shadow:0 4px 20px rgba(6,214,160,0.35)" onclick="guardarP3()">
+          ❤️ ¡Guardar momento!
+        </button>
+      </div>
+
+      <div class="tarjetas-grid" id="grid-p3"></div>
+      <div class="vacio" id="vacio-p3">
+        <span class="vacio-emoji">❤️</span>
+        <p>¡Guarda aquí tus conexiones más especiales!</p>
+      </div>
+    </div>
+
+    <!-- ===== PILAR 4: MI MENTE FUERTE ===== -->
+    <div id="mente-fuerte" class="seccion">
+      <div class="sec-titulo" style="color:var(--morado)">🧠 Mi Mente Fuerte</div>
+      <p class="sec-desc">Regulación emocional y función ejecutiva — ¡Entiende y regula cómo te sientes! 💫</p>
+
+      <!-- Emoción del día -->
+      <div class="formulario">
+        <div class="form-titulo">😊 ¿Cómo me siento hoy?</div>
+        <div class="emocion-grid" id="emocion-grid">
+          <button class="emocion-btn" onclick="selEmocion(this,'😄','Muy feliz')"><span>😄</span><span>Muy feliz</span></button>
+          <button class="emocion-btn" onclick="selEmocion(this,'🙂','Bien')"><span>🙂</span><span>Bien</span></button>
+          <button class="emocion-btn" onclick="selEmocion(this,'😐','Regular')"><span>😐</span><span>Regular</span></button>
+          <button class="emocion-btn" onclick="selEmocion(this,'😟','Preocupado')"><span>😟</span><span>Preocupado</span></button>
+          <button class="emocion-btn" onclick="selEmocion(this,'😢','Triste')"><span>😢</span><span>Triste</span></button>
+          <button class="emocion-btn" onclick="selEmocion(this,'😠','Enojado')"><span>😠</span><span>Enojado</span></button>
+          <button class="emocion-btn" onclick="selEmocion(this,'😨','Asustado')"><span>😨</span><span>Asustado</span></button>
+          <button class="emocion-btn" onclick="selEmocion(this,'🤩','Emocionado')"><span>🤩</span><span>Emocionado</span></button>
+        </div>
+
+        <div class="form-grupo">
+          <label class="form-label">¿Qué pasó hoy?</label>
+          <textarea id="p4-contexto" class="form-textarea" placeholder="Cuéntame un poco sobre tu día..."></textarea>
+        </div>
+
+        <div class="form-grupo" id="calma-grupo" style="display:none">
+          <label class="form-label">🌬️ ¿Qué hice para calmarme?</label>
+          <div class="estrategias-grid">
+            <button class="estrategia-btn" onclick="selCalma(this)">🌬️ Respiré profundo</button>
+            <button class="estrategia-btn" onclick="selCalma(this)">🚶 Caminé un poco</button>
+            <button class="estrategia-btn" onclick="selCalma(this)">🎵 Escuché música</button>
+            <button class="estrategia-btn" onclick="selCalma(this)">✏️ Dibujé o escribí</button>
+            <button class="estrategia-btn" onclick="selCalma(this)">🤗 Hablé con alguien</button>
+            <button class="estrategia-btn" onclick="selCalma(this)">⏸️ Me tomé un descanso</button>
+          </div>
+        </div>
+
+        <!-- Plan para mañana -->
+        <div class="form-grupo">
+          <label class="form-label">📋 Mi plan para mañana</label>
+          <input id="p4-plan" class="form-input" placeholder="Ej: Voy a estudiar 30 minutos...">
+        </div>
+
+        <button class="btn-guardar" style="background:linear-gradient(135deg,var(--morado),var(--azul));box-shadow:0 4px 20px rgba(108,61,232,0.35)" onclick="guardarP4()">
+          🧠 ¡Guardar mi día!
+        </button>
+      </div>
+
+      <div class="tarjetas-grid" id="grid-p4"></div>
+      <div class="vacio" id="vacio-p4">
+        <span class="vacio-emoji">🧠</span>
+        <p>¡Empieza a registrar cómo te sientes cada día!</p>
+      </div>
+    </div>
+
+    <!-- ===== RETO COGNITIVO ===== -->
+    <div id="reto" class="seccion">
+      <div class="sec-titulo" style="color:var(--morado)">💪 ¡Sí Puedo!</div>
+      <p class="sec-desc">
+        Reestructuración cognitiva — ¡Tu álbum tiene la evidencia! 🌟
+        <br><em id="reto-bloqueo-msg" style="font-size:0.82rem;color:#bbb;"></em>
+      </p>
+
+      <div id="reto-contenido">
+        <div class="caja-reto">
+          <h3>🔄 Transformar un pensamiento difícil</h3>
+          <div class="form-grupo">
+            <label class="form-label">El pensamiento que tuve...</label>
+            <select id="pens-select" class="form-select">
+              <option value="">Elige un pensamiento...</option>
+              <option value="no_puedo">❌ "No puedo hacer esto"</option>
+              <option value="no_soy_bueno">❌ "No soy bueno/a en nada"</option>
+              <option value="no_me_gusto">❌ "No me gusto cómo soy"</option>
+              <option value="no_me_quieren">❌ "Nadie me quiere"</option>
+              <option value="soy_tonto">❌ "Soy tonto/a"</option>
+              <option value="todo_mal">❌ "Todo me sale mal"</option>
+              <option value="no_tengo_amigos">❌ "No tengo amigos"</option>
+            </select>
+          </div>
+          <button class="btn-guardar" style="width:auto;padding:12px 24px" onclick="reestructurar()">
+            ✨ Ver mi evidencia
+          </button>
+        </div>
+
+        <div id="resultado-reto" style="display:none">
+          <div class="caja-reto" style="margin-top:0">
+            <h3>💭 El pensamiento difícil:</h3>
+            <div class="pens-neg" id="pens-neg"></div>
+            <div class="pens-flecha">⬇️ ¡Mi álbum dice otra cosa! ⬇️</div>
+            <div class="pens-pos" id="pens-pos"></div>
+            <div style="margin-top:14px;font-size:0.82rem;font-weight:800;color:#7B68B5">📖 Evidencia de mi álbum:</div>
+            <div id="evidencias-reto"></div>
+          </div>
+        </div>
+
+        <!-- Frases de poder -->
+        <div class="frases-container">
+          <div style="font-family:'Baloo 2',cursive;font-size:1.05rem;font-weight:800;color:var(--texto);margin-bottom:14px">
+            💬 Mis frases de poder
+          </div>
+          <div id="frases-poder">
+            <div class="evidencia-item">🌟 "Soy capaz de aprender cosas nuevas"</div>
+            <div class="evidencia-item">💪 "Aunque es difícil, puedo intentarlo"</div>
+            <div class="evidencia-item">❤️ "Me quiero y me cuido"</div>
+            <div class="evidencia-item" id="frase-dinamica">✨ ¡Agrega más fortalezas para ver más frases aquí!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== DASHBOARD PSICÓLOGO ===== -->
+    <div id="dash-inicio" class="seccion activa">
+      <div class="dash-header">
+        <div class="dash-titulo">📊 Dashboard del Psicólogo</div>
+        <div class="dash-sub" id="dash-welcome">Bienvenido/a al panel de control</div>
+      </div>
+
+      <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--morado)" id="ds-total-pac">0</div>
+          <div class="stat-lbl">👥 Pacientes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--verde)" id="ds-total-reg">0</div>
+          <div class="stat-lbl">📝 Registros</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--naranja)" id="ds-semana-prom">0</div>
+          <div class="stat-lbl">📅 Sem. Prom</div>
+        </div>
+      </div>
+
+      <div class="dash-chart">
+        <div class="dash-chart-titulo">📈 Actividad general por área</div>
+        <div id="dash-barras-global"></div>
+      </div>
+
+      <div style="font-family:'Baloo 2',cursive;font-size:1.1rem;font-weight:800;color:var(--texto);margin-bottom:14px">
+        ⚡ Acceso rápido a pacientes
+      </div>
+      <div id="dash-pacientes-rapido"></div>
+    </div>
+
+    <!-- ===== MIS PACIENTES ===== -->
+    <div id="mis-pacientes" class="seccion">
+      <div class="sec-titulo">👥 Mis Pacientes</div>
+      <p class="sec-desc">Gestiona y accede a los perfiles de tus pacientes</p>
+
+      <div class="crear-paciente-btn" onclick="abrirModalPaciente()">
+        <div class="crear-icon">➕</div>
+        <div class="crear-txt">Crear nuevo paciente</div>
+        <div style="font-size:0.82rem;color:#aaa;font-weight:600;margin-top:4px">Asigna nombre, edad y contraseña</div>
+      </div>
+
+      <div id="lista-pacientes" class="pacientes-grid">
+        <div class="cargando-datos">
+          <span class="sp">⏳</span>
+          <p style="font-weight:700;font-size:0.9rem">Cargando pacientes...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PERFIL PACIENTE (vista psicólogo) ===== -->
+    <div id="perfil-paciente" class="seccion">
+      <div id="perfil-contenido">
+        <div style="text-align:center;padding:40px;color:#bbb">
+          <div style="font-size:48px;margin-bottom:12px">👆</div>
+          <p style="font-weight:700">Selecciona un paciente para ver su perfil</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /contenido -->
+</div><!-- /app -->
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+<div class="confeti-container" id="confeti"></div>
+
+<!-- Modal crear paciente -->
+<div class="modal-overlay" id="modal-paciente">
+  <div class="modal-box">
+    <div class="modal-titulo">👤 Nuevo Paciente</div>
+    <div class="form-grupo">
+      <label class="login-label">Nombre del niño/a</label>
+      <input id="m-nombre" class="login-input" placeholder="Nombre completo...">
+    </div>
+    <div class="form-grupo">
+      <label class="login-label">Edad</label>
+      <input id="m-edad" class="login-input" type="number" min="4" max="17" placeholder="Ej: 8">
+    </div>
+    <div class="form-grupo">
+      <label class="login-label">Nombre de usuario (para login)</label>
+      <input id="m-usuario" class="login-input" placeholder="Ej: sofia2024" autocomplete="off">
+    </div>
+    <div class="form-grupo">
+      <label class="login-label">Contraseña</label>
+      <input id="m-pass" class="login-input" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+    </div>
+    <div class="form-grupo">
+      <label class="login-label">Emoji avatar</label>
+      <div class="emoji-picker" id="emoji-avatar" style="gap:8px">
+        <span class="emoji-op sel" onclick="selEmoji(this,'avatar')" style="font-size:26px">🦋</span>
+        <span class="emoji-op" onclick="selEmoji(this,'avatar')" style="font-size:26px">🦁</span>
+        <span class="emoji-op" onclick="selEmoji(this,'avatar')" style="font-size:26px">🐬</span>
+        <span class="emoji-op" onclick="selEmoji(this,'avatar')" style="font-size:26px">🦊</span>
+        <span class="emoji-op" onclick="selEmoji(this,'avatar')" style="font-size:26px">🐧</span>
+        <span class="emoji-op" onclick="selEmoji(this,'avatar')" style="font-size:26px">🌟</span>
+        <span class="emoji-op" onclick="selEmoji(this,'avatar')" style="font-size:26px">🌸</span>
+        <span class="emoji-op" onclick="selEmoji(this,'avatar')" style="font-size:26px">🐸</span>
+      </div>
+    </div>
+    <div id="modal-error" class="login-error"></div>
+    <div class="modal-row">
+      <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+      <button class="btn-crear" onclick="crearPaciente()">✨ Crear paciente</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+// Registrar Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('SW registrado:', reg.scope))
+      .catch(err => console.log('SW error:', err));
+  });
+}
+</script>
+</body>
+</html>
